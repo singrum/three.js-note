@@ -1,27 +1,28 @@
 // scene, camera, renderer 설정
+
+let scene, camera, renderer;
+
 function setting(){
-    let scene = new THREE.Scene();
-    let camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    
-    let renderer = new THREE.WebGLRenderer();
-    renderer.setClearColor(0xEEEEEE);
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.shadowMap.enabled = true;
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    renderer = new THREE.WebGLRenderer();
+
     //축 설정 : rgb = xyz
     let axes = new THREE.AxesHelper(20);
     scene.add(axes);
-    return [scene, camera, renderer]
 }
 
 function init(){
-    [scene, camera, renderer] = setting();
+    setting();
+    scene.add(camera)
     // plane 설정
     // mesh(geometry, meterial)
     // material constructor : MeshBasicMaterial(광원 반응x), MeshLambertMaterial(광원 반응o)
     // geometry : 폭, 높이, widthSegements, heightSegements
-    let planeGeometry = new THREE.PlaneGeometry(60,20,1,1);
-    let planeMaterial = new THREE.MeshLambertMaterial({color: 0xcccccc});
-    let plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    let plane = new THREE.Mesh(
+        new THREE.PlaneGeometry(60,20,1,1),
+        new THREE.MeshLambertMaterial({color: 0xcccccc})
+        );
 
 
     // rotation, position
@@ -37,9 +38,10 @@ function init(){
 
     //cube 설정
     //mesh(geometry, material)
-    let cubeGeometry = new THREE.BoxGeometry(4,4,4);
-    let cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
-    let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    let cube = new THREE.Mesh(
+        new THREE.BoxGeometry(4,4,4),
+        new THREE.MeshLambertMaterial({color: 0xff0000})
+        );
     
     //position
     cube.position.x = -4;
@@ -51,9 +53,10 @@ function init(){
 
     //sphere 설정
     //mesh(geometry, material)
-    let sphereGeometry = new THREE.SphereGeometry(4,20,20);
-    let sphereMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
-    let sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    let sphere = new THREE.Mesh(
+        new THREE.SphereGeometry(4,20,20), 
+        new THREE.MeshLambertMaterial({color: 0x7777ff})
+        );
     //position
     sphere.position.x = 20;
     sphere.position.y = 4;
@@ -81,6 +84,9 @@ function init(){
     document.body.appendChild(renderer.domElement);
 
     //렌더링
+    renderer.setClearColor(0xEEEEEE);
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.shadowMap.enabled = true;
     renderer.render(scene,camera);
 }
 window.onload = init;
