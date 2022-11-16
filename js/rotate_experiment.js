@@ -1,3 +1,4 @@
+
 let scene, camera, renderer;
 
 
@@ -14,6 +15,7 @@ function init(){
     camera.position.x = 30;
     camera.position.y = 30;
     camera.position.z = 30;
+    camera.up = new THREE.Vector3(0,0,1);
     camera.lookAt(scene.position);
     scene.add(camera);
     
@@ -23,9 +25,15 @@ function init(){
     spotLight.castShadow = true;
     scene.add(spotLight);
     
-    //object(axes)
-    let axes = new THREE.AxesHelper(20);
-    scene.add(axes);
+    //fixed axes
+    let axes_f = new THREE.AxesHelper(20);
+    axes_f.setColors("black","black","black");
+    scene.add(axes_f);
+
+    //rotated axes
+    let axes_r = new THREE.AxesHelper(20);
+    axes_r.setColors("red","red","red");
+    scene.add(axes_r);
 
     //object(box)
     let box = new THREE.Mesh(
@@ -40,20 +48,18 @@ function init(){
 
     //gui 생성
     let controls = new function(){
-        this.Eulerian1 = 0;
-        this.Eulerian2 = 0;
-        this.Eulerian3 = 0;
+        this.var1 = 0;
+        this.var2 = 0;
+        this.var3 = 0;
     }
     let gui = new dat.GUI();
-    gui.add(controls, "Eulerian1", 0, 2 * Math.PI);
-    gui.add(controls, "Eulerian2", 0, 2 * Math.PI);
-    gui.add(controls, "Eulerian3", 0, 2 * Math.PI);
+    gui.add(controls, "var1", -2 * Math.PI, 2 * Math.PI);
+    gui.add(controls, "var2", -2 * Math.PI, 2 * Math.PI);
+    gui.add(controls, "var3", -2 * Math.PI, 2 * Math.PI);
 
     function renderScene(){
-        box.rotation.y = controls.Eulerian2;
-        box.rotation.x = controls.Eulerian1;
-        
-        // box.rotation.x = controls.Eulerian3;
+        box.rotation.set(controls.var1,controls.var2,controls.var3)
+        axes_r.rotation.set(controls.var1, controls.var2, controls.var3);
         requestAnimationFrame(renderScene);
         renderer.render(scene, camera);
     }
