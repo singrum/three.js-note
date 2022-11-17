@@ -14,14 +14,22 @@ function init(){
     camera.lookAt(scene.position);
     scene.add(camera);
 
-    let spotLight = new THREE.SpotLight(0xffffff);
-    spotLight.position.set(80, 90, 80);
-    spotLight.castShadow = true;
-    scene.add(spotLight);
-    let ambientLight = new THREE.AmbientLight(0x000000);
-    spotLight.position.set(80, 90, 80);
-    scene.add(ambientLight);
+    let pointLight = new THREE.PointLight(0xffffff);
+    pointLight.position.set(0, 15, 0);
+    pointLight.castShadow = true;
+    scene.add(pointLight);
+
+    // let ambientLight = new THREE.AmbientLight(0xff000);   
+    // ambientLight.position.set(80, 90, 80);
     
+    // scene.add(ambientLight);
+
+    
+    // let ambientLight2 = new THREE.AmbientLight(0xffccff);   
+    // ambientLight2.position.set(80, 90, 80);
+    // scene.add(ambientLight2);
+
+
     let axes = new THREE.AxesHelper(20);
     scene.add(axes);
 
@@ -40,14 +48,16 @@ function init(){
         new THREE.BoxGeometry(10,10,10),
         new THREE.MeshLambertMaterial({color: 0xcccccc})
     )
+    
     cube.position.set(0,5,0)
     scene.add(cube);
         
     let i = 0;
     function renderScene(){
-        i += 10;
-        ambientLight = new THREE.AmbientLight(i)
-        scene.add(ambientLight);
+        i ++;
+        colorHex = 0x00ff00 + i;
+        
+        pointLight.color.setHex(colorHex);
         requestAnimationFrame(renderScene);
         renderer.render(scene, camera);
     }
