@@ -23,7 +23,7 @@ function init(){
     scene.add(axes);
 
     let plane = new THREE.Mesh(
-        new THREE.PlaneGeometry(60,20,1,1),
+        new THREE.PlaneGeometry(100,100,1,1),
         new THREE.MeshLambertMaterial({color: 0xcccccc})
         );
     plane.rotation.x = -0.5 * Math.PI;
@@ -31,19 +31,48 @@ function init(){
     plane.receiveShadow = true;
     scene.add(plane);
 
+
+    
+    const cubeLength = 6;
     let cube = new THREE.Mesh(
-        new THREE.BoxGeometry(6,6,6),
+        new THREE.BoxGeometry(cubeLength,cubeLength,cubeLength),
         new THREE.MeshLambertMaterial({color: 0xff0000})
-        );
+    );
+        
     cube.position.set(0,3,0);
     cube.castShadow = true;
-    scene.add(cube)
+    
+    let wrapper = new THREE.Object3D();
+    wrapper.add(cube);
+    scene.add(wrapper);
+    wrapper.position.set(0,0,0);
+    
 
 
+    let i = 0;
+    let rollCounter = 0;
+    let start = true
     function renderScene(){
+        if(start){
+            rollCounter++;
+            wrapper.rotation.x = 0;
+            wrapper.position.z = cubeLength/2 * (2 * rollCounter - 1);
+            cube.position.z = - cubeLength/2;
+            
+            
+            i = 0;
+            start = false;
+            
 
-
-
+        }
+        else{
+            i += 0.01
+            wrapper.rotation.x = i
+            if(wrapper.rotation.x > Math.PI / 2){
+                
+                start = true
+            }
+        }
         requestAnimationFrame(renderScene);
         renderer.render(scene, camera);
     }
