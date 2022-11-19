@@ -10,7 +10,7 @@ function init(){
     scene = new THREE.Scene();
 
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    camera.position.set(-40,30,30);
+    camera.position.set(-100,100,70);
     camera.lookAt(scene.position);
 
 
@@ -23,8 +23,8 @@ function init(){
     scene.add(axes);
 
     let plane = new THREE.Mesh(
-        new THREE.PlaneGeometry(100,100,1,1),
-        new THREE.MeshLambertMaterial({color: 0xcccccc})
+        new THREE.PlaneGeometry(100,200,1,1),
+        new THREE.MeshLambertMaterial({color: 0xffffff})
         );
     plane.rotation.x = -0.5 * Math.PI;
     plane.position.set(0,0,0);
@@ -45,7 +45,7 @@ function init(){
     let wrapper = new THREE.Object3D();
     wrapper.add(cube);
     scene.add(wrapper);
-    wrapper.position.set(0,0,0);
+    wrapper.position.set(0,0,-50);
     
 
 
@@ -56,8 +56,8 @@ function init(){
         if(start){
             rollCounter++;
             wrapper.rotation.x = 0;
-            wrapper.position.z = cubeLength/2 * (2 * rollCounter - 1);
-            cube.position.z = - cubeLength/2;
+            wrapper.position.z = -50 + cubeLength/2 * (2 * rollCounter - 1);
+            cube.position.z = -cubeLength/2;
             
             
             i = 0;
@@ -66,13 +66,14 @@ function init(){
 
         }
         else{
-            i += 0.01
+            i += 0.05
             wrapper.rotation.x = i
             if(wrapper.rotation.x > Math.PI / 2){
                 
                 start = true
             }
         }
+        
         requestAnimationFrame(renderScene);
         renderer.render(scene, camera);
     }
