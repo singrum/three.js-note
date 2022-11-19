@@ -39,11 +39,21 @@ function init(){
         );
     cube.position.set(0,3,0);
     cube.castShadow = true;
-    scene.add(cube);
-    cube.matrix.setPosition(new THREE.Vector3(10,10,10));
     
+
+    let wrapper = new THREE.Object3D()
+    wrapper.matrixAutoUpdate = false;
+    wrapper.add(cube);
+
+    wrapper.matrix.elements = makeTranslation(1,1,1), wrapper.matrix.makeRotationAxis(new THREE.Vector3(1,1,1), Math.PI/6)
+    console.log(wrapper.matrix)
+    scene.add(wrapper)
+    console.log(wrapper)
     let i = 0;
     function renderScene(){
+
+        i+=0.05
+
         requestAnimationFrame(renderScene);
         renderer.render(scene, camera);
     }
