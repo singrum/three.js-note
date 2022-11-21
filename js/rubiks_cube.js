@@ -50,10 +50,10 @@ function init(){
     blocks.forEach((block)=>{scene.add(block);});
     let cnt = 0;
 
-    for(let i = -1;i<=1;i++){
+    for(let i = -1;i<=1;i++){ 
         for(let j=-1;j<=1;j++){
             for(let k=-1;k<=1;k++){
-                blocks[cnt].matrix.makeTranslation((blockLen+0.1) * i, (blockLen + 0.1) * j, (blockLen + 0.1) * k);
+                blocks[cnt].matrix.makeTranslation((blockLen + 0.1) * i, (blockLen + 0.1) * j, (blockLen + 0.1) * k);
                 cnt++;
             }
         }
@@ -61,12 +61,11 @@ function init(){
         
     // define the new attribute
         
-
-
+    console.log(blocks[0])
+    let i = 0;
     function renderScene(){
-        let i = 0.01;
-        blocks
-
+        i += 0.01
+        
 
 
 
