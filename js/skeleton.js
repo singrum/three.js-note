@@ -1,4 +1,4 @@
-let camera, scene, renderer;
+let camera, scene, renderer, controls;
 window.addEventListener("resize", onResize, false);
 function onResize(){
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -43,7 +43,7 @@ function init(){
     function renderScene(){
 
 
-
+        controls.update();
         requestAnimationFrame(renderScene);
         renderer.render(scene, camera);
     }
@@ -51,6 +51,7 @@ function init(){
 
     //renderer
     renderer = new THREE.WebGLRenderer();
+    controls = new THREE.OrbitControls( camera, renderer.domElement );
     renderer.setClearColor(0xEEEEEE);
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMap.enabled = true;
