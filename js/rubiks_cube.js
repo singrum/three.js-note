@@ -14,14 +14,13 @@ function init(){
     camera.lookAt(scene.position);
 
 
-    let spotLight = new THREE.SpotLight(0xffffff);
-    spotLight.position.set(-40, 60, -10);
-    spotLight.castShadow = true;
-    scene.add(spotLight);
+    let spotLights = [new THREE.SpotLight(0xffffff),new THREE.SpotLight(0xffffff),new THREE.SpotLight(0xffffff),new THREE.SpotLight(0xffffff)]
+    spotLights[0].position.set(-40, 60, -40);
+    spotLights[1].position.set(40, 60, 40);
+    spotLights[2].position.set(40, -60, 40);
+    spotLights[3].position.set(-40, -60, -40);
+    spotLights.forEach((s)=>scene.add(s));
     
-    let axes = new THREE.AxesHelper(20);
-    scene.add(axes);
-
 
 
 
@@ -34,9 +33,7 @@ function init(){
     const colors = [];
     const color6 = [new THREE.Color(0xff0000), new THREE.Color(0xff8000),new THREE.Color(0xffff00),new THREE.Color(0x00ff00),new THREE.Color(0x0000ff),new THREE.Color(0xffffff)]
 
-    console.log(positionAttribute)
     for ( let i = 0; i < 6; i ++ ) {
-        console.log(color6[i])
         for(let j=0;j<6;j++){
             colors.push( color6[i].r, color6[i].g, color6[i].b );
         }
@@ -52,7 +49,6 @@ function init(){
     }
     blocks.forEach((block)=>{scene.add(block);});
     let cnt = 0;
-    console.log(blocks)
 
     for(let i = -1;i<=1;i++){
         for(let j=-1;j<=1;j++){
@@ -68,9 +64,13 @@ function init(){
 
 
     function renderScene(){
+        let i = 0.01;
+        blocks
+
+
+
 
         controls.update();
-
         requestAnimationFrame(renderScene);
         renderer.render(scene, camera);
     }
@@ -83,7 +83,7 @@ function init(){
     
     //controls
     controls = new THREE.OrbitControls( camera, renderer.domElement );
-    
+
     renderer.setClearColor(0xEEEEEE);
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMap.enabled = true;
