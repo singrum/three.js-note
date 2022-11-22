@@ -50,10 +50,16 @@ function init(){
     blocks.forEach((block)=>{scene.add(block);});
     let cnt = 0;
 
+    const coordinate = {}
     for(let i = -1;i<=1;i++){ 
         for(let j=-1;j<=1;j++){
             for(let k=-1;k<=1;k++){
                 blocks[cnt].matrix.makeTranslation((blockLen + 0.1) * i, (blockLen + 0.1) * j, (blockLen + 0.1) * k);
+                coordinate[cnt] = {
+                    x : (blockLen + 0.1) * i, 
+                    y : (blockLen + 0.1) * j, 
+                    z : (blockLen + 0.1) * k
+                }
                 cnt++;
             }
         }
@@ -65,7 +71,9 @@ function init(){
     let i = 0;
     function renderScene(){
         i += 0.01
-        
+        for(let j = 0; j < 9; j++){
+            blocks[j].matrix.makeRotationX(i).multiply(new THREE.Matrix4().makeTranslation(coordinate[j].x, coordinate[j].y, coordinate[j].z));
+        }
 
 
 

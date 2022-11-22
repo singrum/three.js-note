@@ -1,77 +1,70 @@
-
-let scene, camera, renderer;
-
-
-
+let camera, scene, renderer, controls;
+window.addEventListener("resize", onResize, false);
+function onResize(){
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
 
 function init(){
-
-    //scene의 구성요소 : camera, lights, objects
     scene = new THREE.Scene();
-    
-    //camera
+
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    
-    camera.position.x = 30;
-    camera.position.y = 30;
-    camera.position.z = 30;
-    camera.up = new THREE.Vector3(0,0,1);
+    camera.position.set(-40,30,30);
     camera.lookAt(scene.position);
-    scene.add(camera);
-    
-    //ligths
+
+
     let spotLight = new THREE.SpotLight(0xffffff);
-    spotLight.position.set(30, 10, 20);
+    spotLight.position.set(-40, 60, -10);
     spotLight.castShadow = true;
     scene.add(spotLight);
     
-    //fixed axes
-    let axes_f = new THREE.AxesHelper(20);
-    axes_f.setColors("black","black","black");
-    scene.add(axes_f);
+    let axes = new THREE.AxesHelper(20);
+    scene.add(axes);
 
-    //rotated axes
-    let axes_r = new THREE.AxesHelper(20);
-    axes_r.setColors("red","red","red");
-    scene.add(axes_r);
+    let plane = new THREE.Mesh(
+        new THREE.PlaneGeometry(60,20,1,1),
+        new THREE.MeshLambertMaterial({color: 0xcccccc})
+        );
+    plane.rotation.x = -0.5 * Math.PI;
+    plane.position.set(0,0,0);
+    plane.receiveShadow = true;
+    scene.add(plane);
 
-    //object(box)
-    let box = new THREE.Mesh(
-        new THREE.BoxGeometry(3,5,7),
-        new THREE.MeshLambertMaterial({color : 0xdddddd})
-    )
-    box.position.x = 2;
-    box.position.y = 2;
-    box.position.z = 2;
-    box.castShadow = true;
-    scene.add(box)
+    let cube = new THREE.Mesh(
+        new THREE.BoxGeometry(3,3,3),
+        new THREE.MeshLambertMaterial({color: 0xff0000})
+        );
+    cube.matrixAutoUpdate = false;
+    
+    cube.matrix.makeTranslation(3,3,0);
+    cube.matrix = new THREE.Matrix4().makeRotationY(Math.PI/6).multiply(cube.matrix)
 
-    //gui 생성
-    let controls = new function(){
-        this.var1 = 0;
-        this.var2 = 0;
-        this.var3 = 0;
-    }
-    let gui = new dat.GUI();
-    gui.add(controls, "var1", -2 * Math.PI, 2 * Math.PI);
-    gui.add(controls, "var2", -2 * Math.PI, 2 * Math.PI);
-    gui.add(controls, "var3", -2 * Math.PI, 2 * Math.PI);
+    console.log(cube.matrix)
+    cube.castShadow = true;
+    scene.add(cube);
+
+    let i = 0;
 
     function renderScene(){
-        box.rotation.set(controls.var1,controls.var2,controls.var3)
-        axes_r.rotation.set(controls.var1, controls.var2, controls.var3);
+        i += 0.02;
+        
+        
+
+        controls.update();
         requestAnimationFrame(renderScene);
         renderer.render(scene, camera);
     }
 
+
     //renderer
     renderer = new THREE.WebGLRenderer();
+    controls = new THREE.OrbitControls( camera, renderer.domElement );
+    
     renderer.setClearColor(0xEEEEEE);
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMap.enabled = true;
     document.body.appendChild(renderer.domElement);
-    renderScene()
+    renderScene();
 }
-
-
 window.onload = init;
